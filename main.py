@@ -17,8 +17,10 @@ def main():
                 return
         
         screen.fill("black")
-        player.draw(screen)
         
+        player.update(dt)
+        player.draw(screen)
+
         pygame.display.flip()
 
         # Framerate cap of 60 FPS
