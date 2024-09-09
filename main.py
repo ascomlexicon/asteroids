@@ -58,9 +58,6 @@ def main():
         scoreboard = font.render(f"Score: {score}", True, (31, 212, 19))
         lives_hud = font.render(f"Lives: {lives}", True, (31, 212, 19))
 
-        screen.blit(scoreboard, (10, 10))
-        screen.blit(lives_hud, (1160, 10))
-
         if player.invincible and (pygame.time.get_ticks() - collision_time >= INVINCIBILITY_TIME):
             player.invincible = False
 
@@ -88,6 +85,9 @@ def main():
 
         for sprite in drawable:
             sprite.draw(screen)
+
+        screen.blit(scoreboard, (10, 10))
+        screen.blit(lives_hud, (1160, 10))
         
         pygame.display.flip()
 
