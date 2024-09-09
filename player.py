@@ -14,6 +14,7 @@ class Player(CircleShape):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shoot_cooldown = 0
+        self.invincible = False
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
