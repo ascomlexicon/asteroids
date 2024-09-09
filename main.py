@@ -28,6 +28,8 @@ def main():
     AsteroidField.containers = (updatable,)
     Shot.containers = (shots, updatable, drawable)
     
+    # Background Image Source: https://wallpapersden.com/4k-starry-sky-stars-milky-way-galaxy-wallpaper/1280x720/
+    background = pygame.image.load("assets/space_background.jpg")
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2) 
@@ -51,6 +53,7 @@ def main():
         font = pygame.font.SysFont("unscii", 14)
 
         screen.fill("black")
+        screen.blit(background, (0, 0))
 
         scoreboard = font.render(f"Score: {score}", True, (31, 212, 19))
         lives_hud = font.render(f"Lives: {lives}", True, (31, 212, 19))
