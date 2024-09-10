@@ -18,6 +18,11 @@ def main() -> None:
     pygame.init()
     pygame.font.init()
 
+    # Music
+    pygame.mixer.music.load("assets/Aftertune - Galaxy.flac")
+    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.play(-1)
+
     # Groups to make entities easier to handle.
     shots: pygame.sprite.Group = pygame.sprite.Group()
     asteroids: pygame.sprite.Group = pygame.sprite.Group()

@@ -45,6 +45,9 @@ class Player(CircleShape):
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
         self.shoot_cooldown = PLAYER_SHOOT_COOLDOWN
 
+        laser_sound: pygame.mixer.Sound = pygame.mixer.Sound("assets/LaserGun.wav")
+        pygame.mixer.Sound.play(laser_sound)
+
     def update(self, dt: float) -> None:
         keys: Any = pygame.key.get_pressed()
         self.shoot_cooldown -= dt
