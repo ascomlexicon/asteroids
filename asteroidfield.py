@@ -1,5 +1,6 @@
 import pygame
 import random
+from typing import List, Union, Callable, Any
 from asteroid import Asteroid
 from constants import (
     ASTEROID_KINDS,
@@ -12,7 +13,7 @@ from constants import (
 
 
 class AsteroidField(pygame.sprite.Sprite):
-    edges = [
+    edges: List[List[Union[Callable[..., pygame.Vector2], pygame.Vector2]]] = [
         [
             pygame.Vector2(1, 0),
             lambda y: pygame.Vector2(-ASTEROID_MAX_RADIUS, y * SCREEN_HEIGHT),
@@ -35,25 +36,27 @@ class AsteroidField(pygame.sprite.Sprite):
         ],
     ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         pygame.sprite.Sprite.__init__(self, self.containers)
-        self.spawn_timer = 0.0
+        self.spawn_timer: float = 0.0
 
-    def spawn(self, radius, position, velocity):
-        asteroid = Asteroid(position.x, position.y, radius)
+    def spawn(
+        self, radius: float, position: pygame.Vector2, velocity: pygame.Vector2
+    ) -> None:
+        asteroid: Asteroid = Asteroid(position.x, position.y, radius)
         asteroid.velocity = velocity
 
-    def update(self, dt):
+    def update(self, dt: float) -> None:
         self.spawn_timer += dt
 
         if self.spawn_timer > ASTEROID_SPAWN_RATE:
             self.spawn_timer = 0
 
             # Spawning asteroids at a random edge
-            edge = random.choice(self.edges)
-            speed = random.randint(40, 100)
-            velocity = edge[0] * speed
+            edge: Any = random.choice(self.edges)
+            speed: int = random.randint(40, 100)
+            velocity: Any = edge[0] * speed
             velocity = velocity.rotate(random.randint(-30, 30))
-            position = edge[1](random.uniform(0, 1))
-            kind = random.randint(1, ASTEROID_KINDS)
+            position: Any = edge[1](random.uniform(0, 1))
+            kind: int = random.randint(1, ASTEROID_KINDS)
             self.spawn(ASTEROID_MIN_RADIUS * kind, position, velocity)

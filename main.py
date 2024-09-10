@@ -14,15 +14,15 @@ from constants import (
 )
 
 
-def main():
+def main() -> None:
     pygame.init()
     pygame.font.init()
 
     # Groups to make entities easier to handle.
-    shots = pygame.sprite.Group()
-    asteroids = pygame.sprite.Group()
-    updatable = pygame.sprite.Group()
-    drawable = pygame.sprite.Group()
+    shots: pygame.sprite.Group = pygame.sprite.Group()
+    asteroids: pygame.sprite.Group = pygame.sprite.Group()
+    updatable: pygame.sprite.Group = pygame.sprite.Group()
+    drawable: pygame.sprite.Group = pygame.sprite.Group()
 
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
@@ -30,16 +30,16 @@ def main():
     Shot.containers = (shots, updatable, drawable)
 
     # Background Image Source: https://wallpapersden.com/4k-starry-sky-stars-milky-way-galaxy-wallpaper/1280x720/
-    background = pygame.image.load("assets/space_background.jpg")
-    clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    background: pygame.Surface = pygame.image.load("assets/space_background.jpg")
+    clock: pygame.time.Clock = pygame.time.Clock()
+    screen: pygame.Surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     asteroid_field = AsteroidField()
 
-    dt = 0
-    score = 0
-    lives = MAX_LIVES
-    collision_time = 0
+    dt: float = 0
+    score: float = 0
+    lives: int = MAX_LIVES
+    collision_time: int = 0
 
     # Timer to signify a second
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
@@ -51,13 +51,15 @@ def main():
             elif event.type == pygame.USEREVENT + 1:
                 score += SCORE_TIME_INCREMENT
 
-        font = pygame.font.SysFont("unscii", 14)
+        font: pygame.font.Font = pygame.font.SysFont("unscii", 14)
 
         screen.fill("black")
         screen.blit(background, (0, 0))
 
-        scoreboard = font.render(f"Score: {score}", True, (31, 212, 19))
-        lives_hud = font.render(f"Lives: {lives}", True, (31, 212, 19))
+        scoreboard: pygame.Surface = font.render(
+            f"Score: {round(score)}", True, (31, 212, 19)
+        )
+        lives_hud: pygame.Surface = font.render(f"Lives: {lives}", True, (31, 212, 19))
 
         if player.invincible and (
             pygame.time.get_ticks() - collision_time >= INVINCIBILITY_TIME
