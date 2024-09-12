@@ -16,6 +16,43 @@ from constants import (
 )
 
 
+def start_menu(screen: pygame.Surface) -> bool:
+    screen.fill("black")
+    title_font: pygame.font.Font = pygame.font.SysFont("unscii", 75)
+    prompt_font: pygame.font.Font = pygame.font.SysFont("jetbrainsmononerdfontmono", 18)
+
+    title: pygame.Surface = title_font.render("ASTEROIDS", True, "white")
+    prompt: pygame.Surface = prompt_font.render("Press ENTER to start", True, "white")
+
+    screen.blit(
+        title,
+        (
+            SCREEN_WIDTH / 2 - title.get_width() / 2,
+            SCREEN_HEIGHT / 2 - title.get_height() / 2,
+        ),
+    )
+
+    screen.blit(
+        prompt,
+        (
+            SCREEN_WIDTH / 2 - prompt.get_width() / 2,
+            SCREEN_HEIGHT / 2 + prompt.get_height() / 2 + 20,
+        ),
+    )
+
+    pygame.display.update()
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_RETURN]:
+        return True
+
+    return False
+
+
+def game_over() -> None:
+    pass
+
+
 def main() -> None:
     pygame.init()
     pygame.font.init()
@@ -57,11 +94,19 @@ def main() -> None:
     score: float = 0
     lives: int = MAX_LIVES
     collision_time: int = 0
+    is_running = False
+
+    while not is_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
+
+        is_running = start_menu(screen)
 
     # Timer to signify a second
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
 
-    while True:
+    while is_running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return

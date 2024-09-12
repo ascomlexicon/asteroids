@@ -7,7 +7,7 @@ A project provided from boot.dev, but with some added twists and my own personal
 
 - [x] Multiple Lives
 
-- [ ] Start Screen
+- [x] Start Screen
 
 - [ ] Game Over Screen (with respawn)
 
