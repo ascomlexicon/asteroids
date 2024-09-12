@@ -4,6 +4,8 @@ from shot import Shot
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from particlefield import ParticleField
+from particle import ExplosionParticle, RocketParticle
 from constants import (
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
@@ -23,6 +25,11 @@ def main() -> None:
     pygame.mixer.music.set_volume(0.4)
     pygame.mixer.music.play(-1)
 
+    explosion_sound: pygame.mixer.Sound = pygame.mixer.Sound(
+        "assets/RetroExplosion.mp3"
+    )
+    explosion_sound.set_volume(0.4)
+
     # Groups to make entities easier to handle.
     shots: pygame.sprite.Group = pygame.sprite.Group()
     asteroids: pygame.sprite.Group = pygame.sprite.Group()
@@ -32,7 +39,9 @@ def main() -> None:
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
-    Shot.containers = (shots, updatable, drawable)
+
+    ExplosionParticle.containers = (updatable, drawable)
+    RocketParticle.containers = (updatable, drawable)
 
     # Background Image Source: https://wallpapersden.com/4k-starry-sky-stars-milky-way-galaxy-wallpaper/1280x720/
     background: pygame.Surface = pygame.image.load("assets/space_background.jpg")
@@ -40,6 +49,7 @@ def main() -> None:
     screen: pygame.Surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     asteroid_field = AsteroidField()
+    particle_field = ParticleField()
 
     dt: float = 0
     score: float = 0
@@ -88,8 +98,16 @@ def main() -> None:
 
                 player.invincible = True
 
+                particle_field.spawn_explosion(asteroid.position, asteroid.radius)
+                pygame.mixer.Sound.play(explosion_sound)
+                asteroid.kill()
+                continue
+
             for shot in shots:
                 if asteroid.has_collided(shot):
+                    particle_field.spawn_explosion(asteroid.position, asteroid.radius)
+                    pygame.mixer.Sound.play(explosion_sound)
+
                     score += asteroid.split()
                     shot.kill()
 
