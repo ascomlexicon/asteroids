@@ -7,29 +7,29 @@ A project provided from boot.dev, but with some added twists and my own personal
 
 - [x] Multiple Lives
 
-- [] Start Screen
+- [ ] Start Screen
 
-- [] Game Over Screen (with respawn)
+- [ ] Game Over Screen (with respawn)
 
 - [x] Asteroid Explosion Effect
 
-- [] Player Rocket Effect
+- [ ] Player Rocket Effect
 
-- [] Player Acceleration
+- [ ] Player Acceleration
 
-- [] Asteroid and Player wrap around
+- [ ] Asteroid and Player wrap around
 
 - [x] Background Image and colours
 
-- [] Weapon Variety (Minigun and Shotgun)
+- [ ] Weapon Variety (Minigun and Shotgun)
 
-- [] Polygon Asteroid
+- [ ] Polygon Asteroid
 
-- [] Adjust spaceship hitbox
+- [ ] Adjust spaceship hitbox
 
-- [] Power-ups (Shield, Penetration, Speed)
+- [ ] Power-ups (Shield, Penetration, Speed)
 
-- [] Bombs
+- [ ] Bombs
 
 ### Credits
 Backing track: Aftertune - Galaxy (sptfy.com/AftertuneMusicOfficial)
