@@ -31,7 +31,8 @@ class Player(CircleShape):
         return [a, b, c]
 
     def draw(self, screen: pygame.Surface) -> None:
-        pygame.draw.polygon(screen, "white", self.triangle())
+        colour = "blue" if self.invincible else "white"
+        pygame.draw.polygon(screen, colour, self.triangle())
 
     def rotate(self, dt: float) -> None:
         self.rotation += PLAYER_TURN_SPEED * dt
