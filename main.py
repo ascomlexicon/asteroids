@@ -9,6 +9,7 @@ from particle import ExplosionParticle, RocketParticle
 from constants import (
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
+    FRAME_RATE,
     SCORE_TIME_INCREMENT,
     MAX_LIVES,
     INVINCIBILITY_TIME,
@@ -91,15 +92,7 @@ def game_over(screen: pygame.Surface, score: float) -> None:
     pygame.display.update()
 
 
-def main() -> None:
-    pygame.init()
-    pygame.font.init()
-
-    # Music
-    pygame.mixer.music.load("assets/Aftertune - Galaxy.flac")
-    pygame.mixer.music.set_volume(0.4)
-    pygame.mixer.music.play(-1)
-
+def game(fps: int, screen: pygame.Surface) -> None:
     explosion_sound: pygame.mixer.Sound = pygame.mixer.Sound(
         "assets/RetroExplosion.mp3"
     )
@@ -120,31 +113,22 @@ def main() -> None:
     ExplosionParticle.containers = (updatable, drawable)
     RocketParticle.containers = (updatable, drawable)
 
-    # Background Image Source: https://wallpapersden.com/4k-starry-sky-stars-milky-way-galaxy-wallpaper/1280x720/
+    # Variables
     background: pygame.Surface = pygame.image.load("assets/space_background.jpg")
     clock: pygame.time.Clock = pygame.time.Clock()
-    screen: pygame.Surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    asteroid_field = AsteroidField()
-    particle_field = ParticleField()
+    player: Player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    asteroid_field: AsteroidField = AsteroidField()
+    particle_field: ParticleField = ParticleField()
 
     dt: float = 0
     score: float = 0
     lives: int = MAX_LIVES
     collision_time: int = 0
-    is_running = False
-
-    while not is_running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
-
-        is_running = start_menu(screen)
 
     # Timer to signify a second
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
 
-    while is_running:
+    while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -168,10 +152,7 @@ def main() -> None:
 
         if lives == 0:
             while True:
-                game_over(screen, score)
-            print("Game over!")
-            print(f"You had {score} points!!!")
-            sys.exit()
+                return score
 
         for sprite in updatable:
             sprite.update(dt)
@@ -182,6 +163,9 @@ def main() -> None:
 
                 lives -= 1
                 score -= LIFE_LOST_SCORE_PENALTY
+
+                if score < 0:
+                    score = 0
 
                 player.invincible = True
 
@@ -206,8 +190,50 @@ def main() -> None:
 
         pygame.display.flip()
 
-        # Framerate cap of 60 FPS
-        dt = clock.tick(60) / 1000
+        dt = clock.tick(fps) / 1000
+
+
+def main() -> None:
+    pygame.init()
+    pygame.font.init()
+
+    # Music
+    pygame.mixer.music.load("assets/Aftertune - Galaxy.flac")
+    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.play(-1)
+
+    screen: pygame.Surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    is_running: bool = False
+    has_quit: bool = False
+    on_game_over: bool = False
+
+    while not is_running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
+
+        is_running = start_menu(screen)
+
+    while not has_quit:
+        final_score = game(FRAME_RATE, screen)
+        on_game_over = True
+
+        while on_game_over:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return
+
+            game_over(screen, final_score)
+
+            keys = pygame.key.get_pressed()
+
+            if keys[pygame.K_r]:
+                on_game_over = False
+
+            if keys[pygame.K_q]:
+                has_quit = True
+                on_game_over = False
 
 
 if __name__ == "__main__":

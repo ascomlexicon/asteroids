@@ -33,3 +33,4 @@ A project provided from boot.dev, but with some added twists and my own personal
 
 ### Credits
 Backing track: Aftertune - Galaxy (sptfy.com/AftertuneMusicOfficial)
+Background Image Source: https://wallpapersden.com/4k-starry-sky-stars-milky-way-galaxy-wallpaper/1280x720/
