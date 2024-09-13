@@ -49,8 +49,46 @@ def start_menu(screen: pygame.Surface) -> bool:
     return False
 
 
-def game_over() -> None:
-    pass
+def game_over(screen: pygame.Surface, score: float) -> None:
+    screen.fill("red")
+
+    large_text: pygame.font.Font = pygame.font.SysFont("unscii", 100)
+    score_text: pygame.font.Font = pygame.font.SysFont("unscii", 40)
+    prompt_font: pygame.font.Font = pygame.font.SysFont("jetbrainsmononerdfontmono", 24)
+
+    game_over_text: pygame.Surface = large_text.render("GAME OVER", True, "black")
+    score_text: pygame.Surface = score_text.render(
+        f"You won {round(score)} points!", True, "black"
+    )
+    prompt: pygame.Surface = prompt_font.render(
+        "Press R to RESTART/Q to quit", True, "black"
+    )
+
+    screen.blit(
+        game_over_text,
+        (
+            SCREEN_WIDTH / 2 - game_over_text.get_width() / 2,
+            SCREEN_HEIGHT / 2 - game_over_text.get_height() / 2,
+        ),
+    )
+
+    screen.blit(
+        score_text,
+        (
+            SCREEN_WIDTH / 2 - score_text.get_width() / 2,
+            SCREEN_HEIGHT / 2 + score_text.get_height() / 2 + 20,
+        ),
+    )
+
+    screen.blit(
+        prompt,
+        (
+            SCREEN_WIDTH / 2 - prompt.get_width() / 2,
+            SCREEN_HEIGHT / 2 + prompt.get_height() / 2 + 60,
+        ),
+    )
+
+    pygame.display.update()
 
 
 def main() -> None:
@@ -129,6 +167,8 @@ def main() -> None:
             player.invincible = False
 
         if lives == 0:
+            while True:
+                game_over(screen, score)
             print("Game over!")
             print(f"You had {score} points!!!")
             sys.exit()
